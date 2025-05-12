@@ -1,10 +1,114 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= title %></title>
+  <title>Top Page</title>
+  <link rel="stylesheet" href="/css/reset.css">
   <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .main .heading {
+      text-align: center;
+      padding: 4rem 1rem;
+      font-size: 5dvh;
+      border-bottom: 2px solid var(--main-color, black);
+    }
+
+    .main .version {
+      text-align: center;
+      justify-content: center;
+      display: flex;
+      border-radius: 10%;
+    }
+
+    .main .version li {
+      width: 90dvw;
+      list-style-type: none;
+      opacity: 95%;
+      margin: 1em 0 0 0;
+      background-color: #b0c4de40;
+      border: 2px solid var(--main-color);
+    }
+
+    .main .version li .header {
+      height: 4dvh;
+    }
+
+    .main .version li .header h1 {
+      font-size: 3dvh;
+      top: 0.5dvh;
+      left: 50%;
+      transform: translateX(-50%);
+      position: absolute;
+      display: inline;
+    }
+
+    .main .version li .explanation {
+      width: 100%;
+      text-align: left;
+      margin: 2px 0 2px 0;
+    }
+
+  </style>
 </head>
 <body>
-  <h1>Welcome to <%= title %></h1>
+  <div class = "container">
+    <header class = "header">
+      <div class = "hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <nav class = "menu">
+        <ul class = "menu_contents">
+          <li><a href="/">Top</a></li>
+          <li><a href="/mypage">Mypage</a></li>
+          <li><a href="#">Inquiry</a></li>
+        </ul>
+      </nav>
+      <h1>Top</h1>
+      <a class = "a_button" href = "<%= login ? '/mypage' : '/login' %>"><%= login ? 'mypage' : 'login' %></a>
+    </header>
+    <main>
+      <div class = "main">
+        <section class = "heading">
+          <h2>This is Top Page</h2>
+        </section>
+        <section class = "version">
+          <ul>
+            <li>
+              <header class = "header">
+                <h1>AAA</h1>
+              </header>
+              <div class = "explanation">
+                <h2>・見出し１</h2>
+                <p>ここに説明を記入</p>
+              </div>
+            </li>
+            <li>
+              <header class = "header">
+                <h1>AAA</h1>
+              </header>
+              <div class = "explanation">
+                <h2>・見出し２</h2>
+                <p>ここに説明を記入</p>
+              </div>
+            </li>
+            <li>
+              <header class = "header">
+                <h1>AAA</h1>
+              </header>
+              <div class = "explanation">
+                <h2>・見出し３</h2>
+                <p>ここに説明を記入</p>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </main>
+    <footer class = "footer">
+      <p>&copy;Babu 2025</p>
+    </footer>
+  </div>
+  <script src = "js/flame.js"></script>
 </body>
 </html>
