@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>login page</title>
+  <title>signup page</title>
   <link rel="stylesheet" href="/css/reset.css">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    div .login-menu {
+    div .signup-menu {
       background-color: var(--main-text-color, #f2f2f2);
       border: 2px solid var(--main-color, #2f2f2f);
       width: 60dvw;
@@ -16,7 +16,7 @@
       transform: translate(-50%, -50%);
       position: absolute;
     }
-    div .login-menu .input-area {
+    div .signup-menu .input-area {
       font-size: large;
       display: flex;
       flex-direction: column;
@@ -28,7 +28,7 @@
       position: absolute;
       border-bottom: 2px solid var(--main-color, #2f2f2f);
     }
-    div .login-menu button {
+    div .signup-menu button {
       padding: 0.5rem 1rem;
       background-color: var(--main-color, #2f2f2f);
       color: var(--main-text-color, #f2f2f2);
@@ -39,10 +39,10 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    div .login-menu button:hover {
+    div .signup-menu button:hover {
       background-color: var(--sub-color);
     }
-    .signup-form {
+    .login-form {
       display: flex;
       flex-direction: column;
       width: 50dvw;
@@ -51,7 +51,7 @@
       transform: translateX(-50%);
       position: absolute;
     }
-    .signup-button {
+    .login-button{
       display: inline-block;
       padding: 0.6rem 1rem;
       background-color: var(--main-color, #2f2f2f);
@@ -64,7 +64,7 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    .signup-button:hover {
+    .login-button:hover {
       background-color: var(--sub-color);
     }
   </style>
@@ -72,11 +72,11 @@
 <body>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('login-form').addEventListener('submit', async function (e) {
+      document.getElementById('signup-form').addEventListener('submit', async function (e) {
         e.preventDefault();
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        const response = await fetch('/login', {
+        const response = await fetch('/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -85,33 +85,33 @@
         });
         const result = await response.json();
         if ( response.ok ) {
-          document.getElementById('message').textContent = 'Login Successfull!';
+          document.getElementById('message').textContent = 'Register Successfull!';
           window.location.href = '/mypage'; // ページ遷移
         } else {
-          alert(result.error || 'Login Failed.');
-          // document.getElementById('message').textContent = result.error || 'Login Failed.'
+          alert(result.error || 'Register Failed.');
+          // document.getElementById('message').textContent = result.error || 'Register Failed.'
         }
       });
     });
   </script>
   <div class = "container">
     <header class = "header">
-      <h1>Login</h1>
+      <h1>Sign Up</h1>
     </header>
     <main>
       <div class = "main">
-        <div class = "login-menu container">
+        <div class = "signup-menu container">
           <header class = "header"><h1>FORM</h1></header>
-          <form id = "login-form" class = "input-area">
+          <form id = "signup-form" class = "input-area">
             <label for = "email">Email</label>
             <input type = "email" id = "email" placeholder = "your@email.com">
             <label for = "password">Password</label>
             <input type = "password" id = "password" placeholder = "Password">
-            <button type = "submit">Login</button>
+            <button type = "submit">Sign Up</button>
             <p id = "message"></p>
           </form>
-          <section class = "signup-form">
-            <a class="signup-button" href = "/register">Sign Up</a>
+          <section class = "login-form">
+            <a class="login-button" href = "/login">login</a>
           </section>
         </div>
       </div>
