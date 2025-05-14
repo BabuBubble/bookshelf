@@ -4,6 +4,7 @@
   <title>MyPage</title>
   <link rel="stylesheet" href="/css/reset.css">
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/book_style.css">
 </head>
 <body>
   <div class = "container">
@@ -21,11 +22,18 @@
         </ul>
       </nav>
       <h1><%= title %></h1>
-      <a class = "a_button" href = "<%= login ? '/mypage' : '/login' %>"><%= login ? 'mypage' : 'login' %></a>
+      <a class = "a_button" href = "/">top</a>
     </header>
     <main>
       <div class = "main">
-        <h1>ハハハハハハ</h1>
+        <div class = "book-shelf">
+          <% for (let i = 0; i < 10; i++) { %>
+            <div class="book">
+              <header class = "header"><a href = "#">title</a></header>
+              <div class = "main"></div>
+            </div>
+          <% } %>
+        </div>
       </div>
     </main>
     <footer class = "footer">

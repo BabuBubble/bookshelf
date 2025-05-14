@@ -1,0 +1,28 @@
+.book-shelf {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30dvh, 1fr));
+}
+
+.book {
+    border: 3px solid var(--main-color, black);
+    border-radius: 9px;
+    margin: 0.5dvh;
+}
+
+.book .header {
+    height: 2dvh;
+    text-align: center;
+}
+
+.book .header a {
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    color: var(--main-text-color, white);
+    font-weight: bold;
+}
+
+.book .main {
+    min-height: 10dvh;
+}
