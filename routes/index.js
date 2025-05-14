@@ -15,6 +15,11 @@ router.get('/mypage', (req, res) => {
     if ( !is_login ) {
         res.redirect('/login');
     }
+    res.render('mypage', { 
+        title: req.session.user.email,
+        login: is_login ,
+    });
+    return;
 
     const userId = req.session.user.id;
 
@@ -37,24 +42,42 @@ router.get('/login', (req, res) => {
     res.render('login');
 });
 
+router.get('/test', (req, res) => {
+});
+
 router.post('/register', async (req, res) => {
     const { email, password } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    db.query('INSERT INTO users (email, password) VALUES (?, ?)', [email, hashedPassword], (err, results) => {
+    db.query('INSERT INTO user (email, password_hash) VALUES (?, ?)', [email, hashedPassword], (err, results) => {
         if (err) throw err;
         res.redirect('/login');
     });
 });
 
 router.post('/login', async (req, res) => {
+  console.log('login: start');
   const { email, password } = req.body;
-  if ((email === 'test1@example.com' && password === '1234') || (email === 'test2@example.com' && password === '4321')) {
-    req.session.user = { email };
-    res.json({ message: 'Logged in' });
-  } else {
-    res.status(401).json({ error: 'Invalid credentials' });
+
+  try {
+    const [results] = await db.query('SELECT * FROM user WHERE email = ?', [email]);
+
+    if ( results.length === 0) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    const user = results[0];
+    const match = await bcrypt.compare(password, user.password_hash);
+
+    if ( match ) {
+      req.session.user = { id: user.id, email: user.email };
+      res.json({ message: 'Logged in' });
+    } else {
+      res.status(401).json({ error: 'Invalid credentials' });
+    }
+  } catch ( err ) {
+    console.error('login: error', err);
   }
 });
 
