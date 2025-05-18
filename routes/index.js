@@ -1,7 +1,8 @@
 const express = require('express');
 const { route } = require('express/lib/application');
 const router = express.Router();
-const db = require('../db');
+const db = require('./db');
+const gbooks_util = require('./googlebooksapi.js');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
@@ -10,41 +11,48 @@ router.get('/', (req, res) => {
     res.render('index', { login: is_login });
 });
 
-router.get('/mypage', (req, res) => {
+router.get('/mypage', async (req, res) => {
     const is_login = req.session.user ? true : false;
     if ( !is_login ) {
-        res.redirect('/login');
+        return res.redirect('/login');
     }
-    res.render('mypage', { 
-        title: req.session.user.email,
-        login: is_login ,
-    });
-    return;
 
     const userId = req.session.user.id;
 
-    db.query('SELECT * FROM books WHERE user_id = ?', [userId], (err, results) => {
-        if (err) throw err;
-
-        res.render('mypage', { 
-            title: req.session.user.email,
-            login: is_login ,
-            books: result
-        });
-    });
+    try {
+      [results] = await db.query('SELECT * FROM books WHERE user_id = ?', [userId]);
+      res.render('mypage', { 
+        login: is_login ,
+        books: results
+      });
+    } catch ( err ) {
+      console.error('DataBase Error:', err);
+      res.status(500).send('An error has occurred.');
+    }
 });
-
+/*
 router.get('/register', (req, res) => {
     res.render('register');
 });
-
+*/
 router.get('/login', (req, res) => {
     res.render('login');
 });
 
-router.get('/test', (req, res) => {
+router.get('/search', async (req, res) => {
+  const is_login = req.session.user ? true : false;
+  const q = req.query.q || '';
+  const pages = req.query.pages;
+  try {
+    const search_results = await gbooks_util.get_books( q, pages );
+    const is_next = (search_results && search_results.items) ? search_results.items.length >= 11 : false;
+    res.render('search_book', { login: is_login, search_results: search_results, query: q, pages: pages, is_next: is_next });
+  } catch ( err ) {
+    console.error('', err);
+    res.status(500).send('検索中にエラーが発生しました');
+  }
 });
-
+/*
 router.post('/register', async (req, res) => {
     const { email, password } = req.body;
 
@@ -55,7 +63,7 @@ router.post('/register', async (req, res) => {
         res.redirect('/login');
     });
 });
-
+*/
 router.post('/login', async (req, res) => {
   console.log('login: start');
   const { email, password } = req.body;

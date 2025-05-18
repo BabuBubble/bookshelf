@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class = "container">
-    <header class = "header">
+    <header class = "page-header">
       <div class = "hamburger">
         <span></span>
         <span></span>
@@ -18,19 +18,25 @@
         <ul class = "menu_contents">
           <li><a href="/">Top</a></li>
           <li><a href="/mypage">Mypage</a></li>
+          <li><a href="/search">Search</a></li>
           <li><a href="#">Inquiry</a></li>
         </ul>
+        <button class = "logout_button">logout</button>
       </nav>
-      <h1><%= title %></h1>
+      <h1>My BookShelf</h1>
       <a class = "a_button" href = "/">top</a>
     </header>
     <main>
       <div class = "main">
+        <button>登録</button>
         <div class = "book-shelf">
-          <% for (let i = 0; i < 10; i++) { %>
+          <% for (let i = 0; i < results.length; i++) { %>
             <div class="book">
-              <header class = "header"><a href = "#">title</a></header>
-              <div class = "main"></div>
+              <header class = "header"><a href = "<%= results[i].info_link %>"><%= results[i].title %></a></header>
+              <div class = "main">
+                <img src = "<%= results[i].image_link %>"></img>
+                <button>本棚から削除</button>
+              </div>
             </div>
           <% } %>
         </div>

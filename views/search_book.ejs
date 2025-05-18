@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MyPage</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/book_style.css">
+    <style>
+        .search-menu {
+            height: 10dvh;
+        }
+
+        .search-menu .input-area {
+            position: absolute;
+            width: 60dvh;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .search-result .page_transition {
+            color: var(--main-color, black);
+            text-align: center;
+        }
+
+        .search-result .page_transition button {
+            color: var(--main-color, black);
+            font-size: 3dvh;
+            cursor : pointer;
+            background: none;
+            border: none;
+            padding-left: 2dvw;
+            padding-right: 2dvw;
+        }
+    </style>
+</head>
+<body>
+    <div class = "container">
+        <header class = "page-header">
+            <div class = "hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav class = "menu">
+                <ul class = "menu_contents">
+                    <li><a href="/">Top</a></li>
+                    <li><a href="/mypage">Mypage</a></li>
+                    <li><a href="/search">Search</a></li>
+                    <li><a href="#">Inquiry</a></li>
+                </ul>
+                <button class = "logout_button">logout</button>
+            </nav>
+            <h1>Search</h1>
+            <a class = "a_button" href = "<%= login ? '/mypage' : '/login' %>"><%= login ? 'mypage' : 'login' %></a>
+        </header>
+        <main>
+            <div class = "main">
+                <div class = "search-menu">
+                    <form id = "search-form" class = "input-area">
+                        <label for = "query">Query</label>
+                        <input type="text" id = "query" placeholder = "Input Query" value = "<%= query %>"></input>
+                        <button type = "submit">Search</button>
+                    </form>
+                </div>
+                <div class = "search-result">
+                    <div class = "page_transition">
+                        <button id = "before_page">◀</button>
+                        <button id = "next_page">▶︎</button>
+                    </div>
+                    <% if ( search_results && search_results.items ) { %>
+                        <% for (let i = 0; i < Math.min(10, search_results.items.length); i++) { %>
+                            <div class="book">
+                                <header class = "header"><a href = "<%= search_results.items[i].volumeInfo.infoLink %>"><%= search_results.items[i].volumeInfo.title %></a></header>
+                                <div class = "main">
+                                    <% const imageLink = (search_results.items[i].volumeInfo.imageLinks && search_results.items[i].volumeInfo.imageLinks.smallThumbnail) ? search_results.items[i].volumeInfo.imageLinks.smallThumbnail : ''; %>
+                                    <img src="<%= imageLink %>"><img>
+                                    <h2><%= search_results.items[i].volumeInfo.description %></h2>
+                                    <button>本棚に入れる</button>
+                                </div>
+                            </div>
+                        <% } %>
+                    <% } else { %>
+                        <p>アイテムが見つかりませんでした...</p>
+                    <% } %>
+                </div>
+            </div>
+        </main>
+        <footer class = "footer">
+            <p>&copy;Babu 2025</p>
+        </footer>
+    </div>
+    <script src = "js/flame.js"></script>
+    <script>
+        const next_page_button = document.getElementById('next_page');
+        const before_page_button = document.getElementById('before_page');
+        function page_transition ( query, pages ) {
+            const search_url = `/search?q=${encodeURIComponent(query)}&pages=${pages}`;
+            console.log(search_url);
+            window.location.href = search_url;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('search-form').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const query = document.getElementById('query').value;
+                page_transition( query, 1 );
+            });
+            if ( "<%= is_next %>".toLowerCase() === "true" ) {
+                next_page_button.addEventListener('click', function () {
+                    const queryString = window.location.search;
+                    const params = new URLSearchParams(queryString);
+                    const q = (params.get("q")) || 1;
+                    const pages = parseInt(params.get("pages"));
+                    console.log(pages+1);
+                    page_transition( q, pages+1 );
+                });
+            }
+            if ( parseInt("<%= pages %>") >= 2 ) {
+                before_page_button.addEventListener('click', function () {
+                    const queryString = window.location.search;
+                    const params = new URLSearchParams(queryString);
+                    const q = (params.get("q")) || 1;
+                    const pages = parseInt(params.get("pages"));
+                    console.log(pages-1);
+                    page_transition( q, pages-1 );
+                });
+            }
+        });
+    </script>
+</body>
+</html>

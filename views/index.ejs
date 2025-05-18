@@ -24,12 +24,16 @@
       list-style-type: none;
       opacity: 95%;
       margin: 1em 0 0 0;
-      background-color: #b0c4de40;
-      border: 2px solid var(--main-color);
+      background-color: var(--block-background-color, silver);
+      border: 2px solid var(--main-color, black);
     }
 
     .main .version li .header {
       height: 4dvh;
+      background-color: var(--main-color, black);
+      color: var(--main-text-color, white);
+      position: relative;
+      border-bottom: 2px solid var(--main-color, black);
     }
 
     .main .version li .header h1 {
@@ -51,7 +55,7 @@
 </head>
 <body>
   <div class = "container">
-    <header class = "header">
+    <header class = "page-header">
       <div class = "hamburger">
         <span></span>
         <span></span>
@@ -61,8 +65,10 @@
         <ul class = "menu_contents">
           <li><a href="/">Top</a></li>
           <li><a href="/mypage">Mypage</a></li>
+          <li><a href="/search">Search</a></li>
           <li><a href="#">Inquiry</a></li>
         </ul>
+        <button class = "logout_button">logout</button>
       </nav>
       <h1>Top</h1>
       <a class = "a_button" href = "<%= login ? '/mypage' : '/login' %>"><%= login ? 'mypage' : 'login' %></a>

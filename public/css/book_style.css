@@ -1,7 +1,7 @@
 .book-shelf {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(30dvh, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
 
 .book {
@@ -11,12 +11,16 @@
 }
 
 .book .header {
-    height: 2dvh;
+    background-color: var(--main-color, black);
+    color: var(--main-text-color, white);
+    position: relative;
+    border-bottom: 2px solid var(--main-color, black);
     text-align: center;
 }
 
 .book .header a {
     width: 100%;
+    height: 100%;
     display: block;
     box-sizing: border-box;
     color: var(--main-text-color, white);
@@ -25,4 +29,26 @@
 
 .book .main {
     min-height: 10dvh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    background-color: var(--block-background-color, silver);
+}
+
+.book .main img {
+    margin: 5px;
+}
+
+.book .main button {
+    height: 25%;
+    padding: 10px;
+    margin: 5px;
+    color: var(--main-text-color, white);
+    background-color: var(--main-color, black);
+    border: 2px solid var(--main-text-color, white);
+}
+
+.book .main button:hover {
+    border: 2px solid var(--sub-text-color, gray);
 }
