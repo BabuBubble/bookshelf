@@ -78,7 +78,7 @@
                                     <% const imageLink = (search_results.items[i].volumeInfo.imageLinks && search_results.items[i].volumeInfo.imageLinks.smallThumbnail) ? search_results.items[i].volumeInfo.imageLinks.smallThumbnail : ''; %>
                                     <img src="<%= imageLink %>"><img>
                                     <h2><%= search_results.items[i].volumeInfo.description %></h2>
-                                    <button>本棚に入れる</button>
+                                    <button id = "book<%= i %>">本棚に入れる</button>
                                 </div>
                             </div>
                         <% } %>
@@ -98,7 +98,7 @@
         const before_page_button = document.getElementById('before_page');
         function page_transition ( query, pages ) {
             const search_url = `/search?q=${encodeURIComponent(query)}&pages=${pages}`;
-            console.log(search_url);
+            // console.log(search_url);
             window.location.href = search_url;
         }
 
@@ -114,7 +114,6 @@
                     const params = new URLSearchParams(queryString);
                     const q = (params.get("q")) || 1;
                     const pages = parseInt(params.get("pages"));
-                    console.log(pages+1);
                     page_transition( q, pages+1 );
                 });
             }
@@ -124,10 +123,33 @@
                     const params = new URLSearchParams(queryString);
                     const q = (params.get("q")) || 1;
                     const pages = parseInt(params.get("pages"));
-                    console.log(pages-1);
                     page_transition( q, pages-1 );
                 });
             }
+            <% if ( search_results && search_results.items ) { %>
+                <% for (let i = 0; i < Math.min(10, search_results.items.length); i++) { %>
+                    const book_button<%= i %> = document.getElementById('book<%= i %>');
+                    book_button<%= i %>.addEventListener('click', async function () {
+                        if ( <%- !login %> ) {
+                            window.location.href = '/login';
+                            return;
+                        }
+                        const response = await fetch('/book_register', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }, 
+                            body: JSON.stringify(<%- JSON.stringify(search_results.items[i]) %>)
+                        });
+                        const result = await response.json();
+                        if ( response.ok ) {
+                            book_button<%= i %>.textContent = '本棚から削除';
+                        } else {
+                            alert(result.error || 'Registration Failed.');
+                        }
+                    });
+                <% } %>
+            <% } %>
         });
     </script>
 </body>

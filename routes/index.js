@@ -30,11 +30,11 @@ router.get('/mypage', async (req, res) => {
       res.status(500).send('An error has occurred.');
     }
 });
-/*
+
 router.get('/register', (req, res) => {
     res.render('register');
 });
-*/
+
 router.get('/login', (req, res) => {
     res.render('login');
 });
@@ -94,5 +94,27 @@ router.post('/logout', (req, res) => {
         res.json({ message: 'Logged Out'});
     });
 });
+
+router.post('/book_register', async (req, res) => {
+  const book_data = req.body;
+  try {
+    [hits] = await db.query('SELECT * FROM books WHERE user_id = ? and api_link = ?', [req.session.user.id, book_data.selfLink]);
+    if ( hits.length == 0 ) {
+      [into_result] = await db.query('INSERT INTO books (user_id, title, api_link, publication_Date, series_id, image_link, info_link) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+        [
+          req.session.user.id, 
+          book_data.volumeInfo.title, 
+          book_data.selfLink, 
+          book_data.volumeInfo.publishedDate, 
+          book_data.volumeInfo.seriesInfo ? book_data.volumeInfo.seriesInfo.volumeSeries.seriesId : null, 
+          (book_data.volumeInfo.imageLinks && book_data.volumeInfo.imageLinks.smallThumbnail) ? book_data.volumeInfo.imageLinks.smallThumbnail : null, 
+          book_data.volumeInfo.infoLink
+        ]);
+      res.json({ message: 'add Bookshelf' });
+    }
+  } catch ( err ) {
+    console.error('Registation: error', err);
+  }
+}); 
 
 module.exports = router;

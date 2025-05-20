@@ -6,7 +6,7 @@ async function get_books( query, startIndex ) {
     }
     try {
         const url = `https://www.googleapis.com/books/v1/volumes?q=intitle:${query}&maxResults=${maxResults}${startIndex ? `&startIndex=${(startIndex-1)*10}` : ''}&orderBy=newest`;
-        console.log(url);
+        // console.log(url);
         const response = await fetch( url );
         if (!response.ok) { 
             throw new Error('Network error');

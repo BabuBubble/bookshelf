@@ -16,6 +16,14 @@
       transform: translate(-50%, -50%);
       position: absolute;
     }
+    div .signup-menu header {
+      background-color: var(--main-color, white);
+      color: var(--main-text-color, black);
+    }
+    div .signup-menu header h1 {
+      font-size: 4dvh;
+      text-align: center;
+    }
     div .signup-menu .input-area {
       font-size: large;
       display: flex;
@@ -70,30 +78,6 @@
   </style>
 </head>
 <body>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('signup-form').addEventListener('submit', async function (e) {
-        e.preventDefault();
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        const response = await fetch('/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          }, 
-          body: JSON.stringify({email, password})
-        });
-        const result = await response.json();
-        if ( response.ok ) {
-          document.getElementById('message').textContent = 'Register Successfull!';
-          window.location.href = '/mypage'; // ページ遷移
-        } else {
-          alert(result.error || 'Register Failed.');
-          // document.getElementById('message').textContent = result.error || 'Register Failed.'
-        }
-      });
-    });
-  </script>
   <div class = "container">
     <header class = "page-header">
       <h1>Sign Up</h1>
@@ -121,5 +105,29 @@
       <p>&copy;Babu 2025</p>
     </footer>
   </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('signup-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const response = await fetch('/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          }, 
+          body: JSON.stringify({email, password})
+        });
+        const result = await response.json();
+        if ( response.ok ) {
+          document.getElementById('message').textContent = 'Register Successfull!';
+          window.location.href = '/mypage'; // ページ遷移
+        } else {
+          alert(result.error || 'Register Failed.');
+          // document.getElementById('message').textContent = result.error || 'Register Failed.'
+        }
+      });
+    });
+  </script>
 </body>
 </html>
